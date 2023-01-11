@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchTokenTrivia } from '../services/apiTrivia';
 
@@ -24,8 +25,14 @@ class Login extends Component {
     this.setState({ isDisable: !(nameValid && emailValid) });
   };
 
-  handleSubmit = async () => {
-    const token = await fetchTokenTrivia().token;
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    const { history } = this.props;
+    const token = await fetchTokenTrivia();
+
+    localStorage.setItem('token', token.token);
+
+    history.push('/game');
   };
 
   render() {
@@ -68,5 +75,11 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default connect()(Login);
