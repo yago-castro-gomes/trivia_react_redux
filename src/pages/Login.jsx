@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchTokenTrivia } from '../services/apiTrivia';
 
 class Login extends Component {
   state = {
@@ -23,10 +24,14 @@ class Login extends Component {
     this.setState({ isDisable: !(nameValid && emailValid) });
   };
 
+  handleSubmit = async () => {
+    const token = await fetchTokenTrivia().token;
+  };
+
   render() {
     const { name, email, isDisable } = this.state;
     return (
-      <form>
+      <form onSubmit={ this.handleSubmit }>
         <label htmlFor="name">
           Nome
           <input
@@ -36,6 +41,7 @@ class Login extends Component {
             data-testid="input-player-name"
             value={ name }
             onChange={ this.handleChange }
+            required
           />
         </label>
         <label htmlFor="email">
@@ -47,6 +53,7 @@ class Login extends Component {
             data-testid="input-gravatar-email"
             value={ email }
             onChange={ this.handleChange }
+            required
           />
         </label>
         <button
