@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import P from 'prop-types';
 import fetchAnswerTrivia from '../services/apiAnswer';
+import Header from '../components/Header';
 
 class Game extends Component {
   state = {
@@ -51,8 +52,10 @@ class Game extends Component {
   render() {
     const { rndAnswer, answer, answerNumber } = this.state;
     return (
-      <div>
-        {answer.length > 0
+      <>
+        <Header />
+        <div>
+          {answer.length > 0
         && (
           <>
             <p data-testid="question-category">{answer[answerNumber].category}</p>
@@ -62,9 +65,9 @@ class Game extends Component {
                 <button
                   key={ index }
                   type="button"
-                  data-testid={ item === answer[answerNumber]
-                    .correct_answer
-                    ? 'correct-answer' : `wrong-answer-${this.handleNumber()}` }
+                  data-testid={ item === answer[answerNumber].correct_answer
+                    ? 'correct-answer'
+                    : `wrong-answer-${this.handleNumber()}` }
                 >
                   {item}
                 </button>
@@ -72,7 +75,8 @@ class Game extends Component {
             </div>
           </>
         )}
-      </div>
+        </div>
+      </>
     );
   }
 }

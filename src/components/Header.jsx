@@ -40,12 +40,9 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  history: P.shape({
-    push: P.func,
-  }),
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-}.isRequired;
+};
 
 const mapStateToProps = (state) => ({
   name: state.name,
