@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { fetchTokenTrivia } from '../services/apiTrivia';
 
 class Login extends Component {
   state = {
@@ -24,10 +26,20 @@ class Login extends Component {
     this.setState({ isDisable: !(nameValid && emailValid) });
   };
 
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    const { history } = this.props;
+    const token = await fetchTokenTrivia();
+
+    localStorage.setItem('token', token.token);
+
+    history.push('/game');
+  };
+
   render() {
     const { name, email, isDisable } = this.state;
     return (
-      <form>
+      <form onSubmit={ this.handleSubmit }>
         <label htmlFor="name">
           Nome
           <input
@@ -37,6 +49,7 @@ class Login extends Component {
             data-testid="input-player-name"
             value={ name }
             onChange={ this.handleChange }
+            required
           />
         </label>
         <label htmlFor="email">
@@ -48,6 +61,7 @@ class Login extends Component {
             data-testid="input-gravatar-email"
             value={ email }
             onChange={ this.handleChange }
+            required
           />
         </label>
         <button
@@ -70,5 +84,11 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default connect()(Login);
