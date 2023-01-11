@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchTokenTrivia } from '../services/apiTrivia';
+import { getGravatarEmail, getName } from '../redux/action';
 
 class Login extends Component {
   state = {
@@ -28,11 +29,12 @@ class Login extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    const { history } = this.props;
+    const { name, email } = this.state;
+    const { history, dispatch } = this.props;
     const token = await fetchTokenTrivia();
-
+    dispatch(getGravatarEmail(email));
+    dispatch(getName(name));
     localStorage.setItem('token', token.token);
-
     history.push('/game');
   };
 
@@ -86,6 +88,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
