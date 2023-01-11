@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchTokenTrivia } from '../services/apiTrivia';
 import { Link } from 'react-router-dom';
+import { fetchTokenTrivia } from '../services/apiTrivia';
 
 class Login extends Component {
   state = {
