@@ -3,18 +3,27 @@ import { connect } from 'react-redux';
 import P from 'prop-types';
 import fetchAnswerTrivia from '../services/apiAnswer';
 import Header from '../components/Header';
+import { sumScore } from '../redux/action';
 
 // const MINUS = -1;
 // let countIndex = MINUS;
+const TIMER = 30;
+
+const difficulty = {
+  hard: 3,
+  medium: 2,
+  easy: 1,
+};
 
 class Game extends Component {
   state = {
     answer: [],
     rndAnswer: [],
     answerNumber: 0,
-    time: 30,
+    time: TIMER,
     disableButton: false,
     isNextVisible: false,
+    correctAnswer: '',
   };
 
   async componentDidMount() {
@@ -27,7 +36,7 @@ class Game extends Component {
     } else {
       this.setState({ answer }, this.handleRandon);
     }
-    this.startTimer();
+    // this.startTimer();
   }
 
   handleRandon = () => {
@@ -44,7 +53,7 @@ class Game extends Component {
 
     this.setState({ rndAnswer: arr2,
       correctAnswer: answer[answerNumber].correct_answer,
-    });
+    }, this.startTimer);
   };
 
   // handleNumber = () => {
@@ -55,28 +64,43 @@ class Game extends Component {
 
   startTimer = () => {
     const thousand = 1000;
-    const interval = setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.setState((prevState) => ({
         time: prevState.time - 1,
       }));
       const { time } = this.state;
       if (time === 1) {
-        clearInterval(interval);
+        clearInterval(this.intervalId);
         this.setState({
           disableButton: true,
+          isNextVisible: true,
         });
       }
     }, thousand);
   };
 
-  handleChooseAnswer = () => {
-    this.setState({ isNextVisible: true });
+  handleChooseAnswer = (resposta) => {
+    const { correctAnswer, time, answer, answerNumber } = this.state;
+    const { dispatch } = this.props;
+
+    clearInterval(this.intervalId);
+    this.setState({ isNextVisible: true, disableButton: true });
+
+    if (resposta === correctAnswer) {
+      console.log('fui chamado');
+      const TEN = 10;
+      const key = answer[answerNumber].difficulty;
+      const score = TEN + (time * difficulty[key]);
+      dispatch(sumScore(score));
+    }
   };
 
   handleNextAnswer = () => {
     const FOUR = 4;
     this.setState((prev) => ({
       isNextVisible: false,
+      time: TIMER,
+      disableButton: false,
       answerNumber: prev.answerNumber < FOUR ? prev.answerNumber + 1 : 0,
     }), this.handleRandon);
   };
@@ -123,7 +147,7 @@ class Game extends Component {
                   data-testid={ item === answer[answerNumber].correct_answer
                     ? 'correct-answer'
                     : `wrong-answer-${index}` }
-                  onClick={ this.handleChooseAnswer }
+                  onClick={ () => this.handleChooseAnswer(item) }
                   style={ this.changeColor(item) }
                 >
                   {item}
@@ -150,6 +174,7 @@ Game.propTypes = {
   history: P.shape({
     push: P.func,
   }),
+  dispatch: P.func,
 }.isRequired;
 
 export default connect()(Game);
