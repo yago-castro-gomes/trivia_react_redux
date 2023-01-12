@@ -4,12 +4,13 @@ import P from 'prop-types';
 import fetchAnswerTrivia from '../services/apiAnswer';
 import Header from '../components/Header';
 
+// let countIndex = -1;
+
 class Game extends Component {
   state = {
     answer: [],
     rndAnswer: [],
     answerNumber: 0,
-    number: 0,
   };
 
   async componentDidMount() {
@@ -32,22 +33,21 @@ class Game extends Component {
 
     const arr2 = [];
 
-    arr.forEach(() => {
-      arr2.push(arr[Math.floor(Math.random() * arr.length)]);
+    arr.forEach((element) => {
+      // arr2.push(arr[Math.floor(Math.random() * arr.length)]);
 
-      const index = arr.indexOf(arr2[arr2.length - 1]);
-      arr.splice(index, 1);
+      // const index = arr.indexOf(arr2[arr2.length - 1]);
+      arr2.splice(Math.floor(Math.random() * arr.length), 0, element);
     });
 
     this.setState({ rndAnswer: arr2 });
   };
 
-  handleNumber = () => {
-    const { number } = this.state;
-    const THREE = 3;
-    this.setState((prev) => ({ number: prev.number > THREE ? 0 : prev.number + 1 }));
-    return number;
-  };
+  // handleNumber = () => {
+  //   const THREE = 3;
+  //   countIndex = countIndex > THREE ? 0 : countIndex + 1;
+  //   return countIndex;
+  // };
 
   render() {
     const { rndAnswer, answer, answerNumber } = this.state;
@@ -67,7 +67,7 @@ class Game extends Component {
                   type="button"
                   data-testid={ item === answer[answerNumber].correct_answer
                     ? 'correct-answer'
-                    : `wrong-answer-${this.handleNumber()}` }
+                    : `wrong-answer-${index}` }
                 >
                   {item}
                 </button>
