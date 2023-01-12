@@ -4,8 +4,8 @@ import P from 'prop-types';
 import fetchAnswerTrivia from '../services/apiAnswer';
 import Header from '../components/Header';
 
-const MINUS = -1;
-let countIndex = MINUS;
+// const MINUS = -1;
+// let countIndex = MINUS;
 
 class Game extends Component {
   state = {
@@ -39,14 +39,16 @@ class Game extends Component {
       arr2.splice(Math.floor(Math.random() * arr.length), 0, element);
     });
 
-    this.setState({ rndAnswer: arr2 });
+    this.setState({ rndAnswer: arr2,
+      correctAnswer: answer[answerNumber].correct_answer,
+    });
   };
 
-  handleNumber = () => {
-    const THREE = 3;
-    countIndex = countIndex > THREE ? 0 : countIndex + 1;
-    return countIndex;
-  };
+  // handleNumber = () => {
+  //   const THREE = 3;
+  //   countIndex = countIndex > THREE ? 0 : countIndex + 1;
+  //   return countIndex;
+  // };
 
   handleChooseAnswer = () => {
     this.setState({ isNextVisible: true });
@@ -58,6 +60,20 @@ class Game extends Component {
       isNextVisible: false,
       answerNumber: prev.answerNumber < FOUR ? prev.answerNumber + 1 : 0,
     }), this.handleRandon);
+  };
+
+  changeColor = (item = '') => {
+    // console.log(item)
+    const { correctAnswer, isNextVisible } = this.state;
+    if (isNextVisible) {
+      return correctAnswer === item
+        ? (
+          { border: '3px solid rgb(6, 240, 15)' }
+        )
+        : (
+          { border: '3px solid red' }
+        );
+    }
   };
 
   render() {
@@ -79,7 +95,8 @@ class Game extends Component {
                   onClick={ this.handleChooseAnswer }
                   data-testid={ item === answer[answerNumber].correct_answer
                     ? 'correct-answer'
-                    : `wrong-answer-${this.handleNumber()}` }
+                    : `wrong-answer-${index}` }
+                  style={ this.changeColor(item) }
                 >
                   {item}
                 </button>
