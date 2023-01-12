@@ -96,13 +96,19 @@ class Game extends Component {
   };
 
   handleNextAnswer = () => {
+    const { answerNumber } = this.state;
+    const { history } = this.props;
     const FOUR = 4;
     this.setState((prev) => ({
       isNextVisible: false,
       time: TIMER,
       disableButton: false,
       answerNumber: prev.answerNumber < FOUR ? prev.answerNumber + 1 : 0,
+      countNext: prev.countNext + 1,
     }), this.handleRandon);
+    if (answerNumber === FOUR) {
+      history.push('/feedback');
+    }
   };
 
   changeColor = (item = '') => {
