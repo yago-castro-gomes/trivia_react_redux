@@ -15,6 +15,7 @@ class Game extends Component {
     time: 30,
     disableButton: false,
     isNextVisible: false,
+    countNext: 0,
   };
 
   async componentDidMount() {
@@ -74,11 +75,18 @@ class Game extends Component {
   };
 
   handleNextAnswer = () => {
+    const { countNext } = this.state;
+    const { history } = this.props;
     const FOUR = 4;
     this.setState((prev) => ({
       isNextVisible: false,
       answerNumber: prev.answerNumber < FOUR ? prev.answerNumber + 1 : 0,
+      time: 30,
+      countNext: prev.countNext + 1,
     }), this.handleRandon);
+    if (countNext === FOUR) {
+      history.push('/feedback');
+    }
   };
 
   changeColor = (item = '') => {
