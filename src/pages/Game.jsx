@@ -12,6 +12,8 @@ class Game extends Component {
     answer: [],
     rndAnswer: [],
     answerNumber: 0,
+    time: 30,
+    disableButton: false,
     isNextVisible: false,
   };
 
@@ -25,6 +27,7 @@ class Game extends Component {
     } else {
       this.setState({ answer }, this.handleRandon);
     }
+    this.startTimer();
   }
 
   handleRandon = () => {
@@ -49,6 +52,22 @@ class Game extends Component {
   //   countIndex = countIndex > THREE ? 0 : countIndex + 1;
   //   return countIndex;
   // };
+
+  startTimer = () => {
+    const thousand = 1000;
+    const interval = setInterval(() => {
+      this.setState((prevState) => ({
+        time: prevState.time - 1,
+      }));
+      const { time } = this.state;
+      if (time === 1) {
+        clearInterval(interval);
+        this.setState({
+          disableButton: true,
+        });
+      }
+    }, thousand);
+  };
 
   handleChooseAnswer = () => {
     this.setState({ isNextVisible: true });
@@ -77,10 +96,18 @@ class Game extends Component {
   };
 
   render() {
-    const { rndAnswer, answer, answerNumber, isNextVisible } = this.state;
+    const { rndAnswer,
+      answer,
+      answerNumber,
+      isNextVisible,
+      disableButton,
+      time } = this.state;
     return (
       <>
         <Header />
+        <div>
+          { time }
+        </div>
         <div>
           {answer.length > 0
         && (
@@ -92,10 +119,11 @@ class Game extends Component {
                 <button
                   key={ index }
                   type="button"
-                  onClick={ this.handleChooseAnswer }
+                  disabled={ disableButton }
                   data-testid={ item === answer[answerNumber].correct_answer
                     ? 'correct-answer'
                     : `wrong-answer-${index}` }
+                  onClick={ this.handleChooseAnswer }
                   style={ this.changeColor(item) }
                 >
                   {item}
