@@ -4,14 +4,16 @@ import P from 'prop-types';
 import fetchAnswerTrivia from '../services/apiAnswer';
 import Header from '../components/Header';
 
-const MINUS = -1;
-let countIndex = MINUS;
+// const MINUS = -1;
+// let countIndex = MINUS;
 
 class Game extends Component {
   state = {
     answer: [],
     rndAnswer: [],
     answerNumber: 0,
+    time: 30,
+    disableButton: false,
   };
 
   async componentDidMount() {
@@ -24,6 +26,7 @@ class Game extends Component {
     } else {
       this.setState({ answer }, this.handleRandon);
     }
+    this.startTimer();
   }
 
   handleRandon = () => {
@@ -41,17 +44,36 @@ class Game extends Component {
     this.setState({ rndAnswer: arr2 });
   };
 
-  handleNumber = () => {
-    const THREE = 3;
-    countIndex = countIndex > THREE ? 0 : countIndex + 1;
-    return countIndex;
+  // handleNumber = () => {
+  //   const THREE = 3;
+  //   countIndex = countIndex > THREE ? 0 : countIndex + 1;
+  //   return countIndex;
+  // };
+
+  startTimer = () => {
+    const thousand = 1000;
+    const interval = setInterval(() => {
+      this.setState((prevState) => ({
+        time: prevState.time - 1,
+      }));
+      const { time } = this.state;
+      if (time === 1) {
+        clearInterval(interval);
+        this.setState({
+          disableButton: true,
+        });
+      }
+    }, thousand);
   };
 
   render() {
-    const { rndAnswer, answer, answerNumber } = this.state;
+    const { rndAnswer, answer, answerNumber, time, disableButton } = this.state;
     return (
       <>
         <Header />
+        <div>
+          { time }
+        </div>
         <div>
           {answer.length > 0
         && (
@@ -63,9 +85,10 @@ class Game extends Component {
                 <button
                   key={ index }
                   type="button"
+                  disabled={ disableButton }
                   data-testid={ item === answer[answerNumber].correct_answer
                     ? 'correct-answer'
-                    : `wrong-answer-${this.handleNumber()}` }
+                    : `wrong-answer-${index}` }
                 >
                   {item}
                 </button>
