@@ -12,6 +12,7 @@ class Game extends Component {
     answer: [],
     rndAnswer: [],
     answerNumber: 0,
+    isNextVisible: false,
   };
 
   async componentDidMount() {
@@ -47,8 +48,20 @@ class Game extends Component {
     return countIndex;
   };
 
+  handleChooseAnswer = () => {
+    this.setState({ isNextVisible: true });
+  };
+
+  handleNextAnswer = () => {
+    const FOUR = 4;
+    this.setState((prev) => ({
+      isNextVisible: false,
+      answerNumber: prev.answerNumber < FOUR ? prev.answerNumber + 1 : 0,
+    }), this.handleRandon);
+  };
+
   render() {
-    const { rndAnswer, answer, answerNumber } = this.state;
+    const { rndAnswer, answer, answerNumber, isNextVisible } = this.state;
     return (
       <>
         <Header />
@@ -63,6 +76,7 @@ class Game extends Component {
                 <button
                   key={ index }
                   type="button"
+                  onClick={ this.handleChooseAnswer }
                   data-testid={ item === answer[answerNumber].correct_answer
                     ? 'correct-answer'
                     : `wrong-answer-${this.handleNumber()}` }
@@ -73,6 +87,14 @@ class Game extends Component {
             </div>
           </>
         )}
+          {isNextVisible && (
+            <button
+              type="button"
+              data-testid="btn-next"
+              onClick={ this.handleNextAnswer }
+            >
+              Next
+            </button>)}
         </div>
       </>
     );
