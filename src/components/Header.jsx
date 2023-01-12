@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 class Header extends Component {
   state = {
     hash: '',
-    score: 0,
   };
 
   componentDidMount() {
@@ -18,8 +17,8 @@ class Header extends Component {
   }
 
   render() {
-    const { name } = this.props;
-    const { hash, score } = this.state;
+    const { name, score } = this.props;
+    const { hash } = this.state;
     return (
       <header>
         <h2 data-testid="header-player-name">{ name }</h2>
@@ -32,6 +31,7 @@ class Header extends Component {
           data-testid="header-score"
         >
           Score:
+          {' '}
           { score }
         </p>
       </header>
@@ -42,11 +42,13 @@ class Header extends Component {
 Header.propTypes = {
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  name: state.name,
-  email: state.gravatarEmail,
+  name: state.player.name,
+  email: state.player.gravatarEmail,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(Header);

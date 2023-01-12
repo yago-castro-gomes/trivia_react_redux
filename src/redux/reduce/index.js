@@ -1,10 +1,12 @@
-import { GRAVATAREMAIL, NAME } from '../action';
+import { GRAVATAREMAIL, NAME, SUM_SCORE } from '../action';
 
 const INITIAL_STATE = {
-  name: '',
-  assertions: '',
-  score: '',
-  gravatarEmail: '',
+  player: {
+    name: '',
+    assertions: '',
+    score: 0,
+    gravatarEmail: '',
+  },
 };
 
 const reduce = (state = INITIAL_STATE, action) => {
@@ -12,13 +14,25 @@ const reduce = (state = INITIAL_STATE, action) => {
   case GRAVATAREMAIL:
     return {
       ...state,
-      gravatarEmail: action.payload,
+      player: {
+        ...state.player, gravatarEmail: action.payload,
+      },
     };
   case NAME:
     return {
       ...state,
-      name: action.payload,
+      player: {
+        ...state.player, name: action.payload,
+      },
     };
+  case SUM_SCORE: {
+    return {
+      ...state,
+      player: {
+        ...state.player, score: state.player.score + action.payload,
+      },
+    };
+  }
   default: {
     return state;
   }
