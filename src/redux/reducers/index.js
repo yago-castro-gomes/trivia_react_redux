@@ -1,4 +1,4 @@
-import { GRAVATAREMAIL, NAME, SUM_SCORE } from '../action';
+import { CLEAR_PLAYER_INFOS, GRAVATAREMAIL, NAME, SUM_SCORE } from '../action';
 
 const INITIAL_STATE = {
   player: {
@@ -33,6 +33,15 @@ const reduce = (state = INITIAL_STATE, action) => {
       },
     };
   }
+  case CLEAR_PLAYER_INFOS:
+    return {
+      ...state,
+      player: {
+        name: '',
+        score: 0,
+        gravatarEmail: '',
+      },
+    };
   default: {
     return state;
   }
