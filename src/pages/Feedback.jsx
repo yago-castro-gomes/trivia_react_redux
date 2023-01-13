@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import P from 'prop-types';
 import Header from '../components/Header';
 
-export default class Feedback extends Component {
+const THREE = 3;
+
+class Feedback extends Component {
   render() {
+    const { assertions } = this.props;
     return (
       <>
         <Header />
         <p data-testid="feedback-text">Feedback</p>
+        <p data-testid="feedback-text">
+          {assertions < THREE
+            ? 'Could be better...'
+            : 'Well Done!'}
+        </p>
         <Link to="/ranking">
           <button
             type="button"
@@ -28,3 +38,13 @@ export default class Feedback extends Component {
     );
   }
 }
+
+Feedback.propTypes = {
+  assertions: P.number.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  assertions: state.player.assertions,
+});
+
+export default connect(mapStateToProps)(Feedback);
