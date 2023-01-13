@@ -7,7 +7,7 @@ import { clearPlayerInfos } from '../redux/action';
 
 class Feedback extends Component {
   render() {
-    const { dispatch, assertions } = this.props;
+    const { dispatch, assertions, score } = this.props;
     const THREE = 3;
 
     return (
@@ -18,6 +18,14 @@ class Feedback extends Component {
           {assertions < THREE
             ? 'Could be better...'
             : 'Well Done!'}
+        </p>
+        <p>
+          Sua pontuação foi:
+          <span data-testid="feedback-total-score">{ score }</span>
+        </p>
+        <p>
+          Você acertou:
+          <span data-testid="feedback-total-question">{ assertions }</span>
         </p>
         <Link to="/ranking">
           <button
@@ -44,10 +52,12 @@ class Feedback extends Component {
 Feedback.propTypes = {
   dispatch: P.func.isRequired,
   assertions: P.number.isRequired,
+  score: P.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   assertions: state.player.assertions,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(Feedback);
