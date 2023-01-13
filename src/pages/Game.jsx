@@ -4,7 +4,7 @@ import P from 'prop-types';
 import { MD5 } from 'crypto-js';
 import fetchAnswerTrivia from '../services/apiAnswer';
 import Header from '../components/Header';
-import { sumScore } from '../redux/action';
+import { addAssertions, sumScore } from '../redux/action';
 
 // const MINUS = -1;
 // let countIndex = MINUS;
@@ -93,6 +93,7 @@ class Game extends Component {
       const key = answer[answerNumber].difficulty;
       const score = TEN + (time * difficulty[key]);
       dispatch(sumScore(score));
+      dispatch(addAssertions());
     }
   };
 
@@ -132,9 +133,11 @@ class Game extends Component {
       picture: `https://www.gravatar.com/avatar/${emailHash}`,
     };
 
-    ranking.sort(({ score: scoreA }, { score: scoreB }) => scoreA - scoreB);
+    ranking.push(playerInfos);
 
-    localStorage.setItem('ranking', JSON.stringify([...ranking, playerInfos]));
+    ranking = ranking.sort(({ score: scoreA }, { score: scoreB }) => scoreB - scoreA);
+
+    localStorage.setItem('ranking', JSON.stringify(ranking));
   };
 
   changeColor = (item = '') => {

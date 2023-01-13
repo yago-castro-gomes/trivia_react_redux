@@ -2,6 +2,7 @@ export const GRAVATAREMAIL = 'GRAVATAREMAIL';
 export const NAME = 'NAME';
 export const SUM_SCORE = 'SUM_SCORE';
 export const CLEAR_PLAYER_INFOS = 'CLEAR_PLAYER_INFOS';
+export const ADD_ASSETTIONS = 'ADD_ASSETTIONS';
 
 export const getGravatarEmail = (email) => ({
   type: GRAVATAREMAIL,
@@ -20,4 +21,8 @@ export const sumScore = (score) => ({
 
 export const clearPlayerInfos = () => ({
   type: CLEAR_PLAYER_INFOS,
+});
+
+export const addAssertions = () => ({
+  type: ADD_ASSETTIONS,
 });
