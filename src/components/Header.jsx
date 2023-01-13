@@ -27,12 +27,10 @@ class Header extends Component {
           alt="profile"
           data-testid="header-profile-picture"
         />
-        <p
-          data-testid="header-score"
-        >
+        <p>
           Score:
           {' '}
-          { score }
+          <span data-testid="header-score">{ score }</span>
         </p>
       </header>
     );
