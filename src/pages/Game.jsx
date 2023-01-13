@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import P from 'prop-types';
+import { MD5 } from 'crypto-js';
 import fetchAnswerTrivia from '../services/apiAnswer';
 import Header from '../components/Header';
 import { addAssertions, sumScore } from '../redux/action';
@@ -108,8 +109,35 @@ class Game extends Component {
       countNext: prev.countNext + 1,
     }), this.handleRandon);
     if (answerNumber === FOUR) {
+      this.updateRanking();
       history.push('/feedback');
     }
+  };
+
+  updateRanking = () => {
+    const { name, email, score } = this.props;
+
+    let ranking = localStorage.getItem('ranking');
+    if (!ranking) {
+      localStorage.setItem('ranking', JSON.stringify([]));
+      ranking = '[]';
+    }
+
+    ranking = JSON.parse(ranking);
+
+    const emailHash = MD5(email).toString();
+
+    const playerInfos = {
+      name,
+      score,
+      picture: `https://www.gravatar.com/avatar/${emailHash}`,
+    };
+
+    ranking.push(playerInfos);
+
+    ranking = ranking.sort(({ score: scoreA }, { score: scoreB }) => scoreB - scoreA);
+
+    localStorage.setItem('ranking', JSON.stringify(ranking));
   };
 
   changeColor = (item = '') => {
@@ -177,11 +205,20 @@ class Game extends Component {
   }
 }
 
+const mapStateToProps = (globalState) => ({
+  name: globalState.player.name,
+  email: globalState.player.gravatarEmail,
+  score: globalState.player.score,
+});
+
 Game.propTypes = {
   history: P.shape({
     push: P.func,
   }),
   dispatch: P.func,
+  email: P.string.isRequired,
+  name: P.string.isRequired,
+  score: P.number.isRequired,
 }.isRequired;
 
-export default connect()(Game);
+export default connect(mapStateToProps)(Game);

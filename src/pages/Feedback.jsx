@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import P from 'prop-types';
 import Header from '../components/Header';
-
-const THREE = 3;
+import { clearPlayerInfos } from '../redux/action';
 
 class Feedback extends Component {
   render() {
-    const { assertions, score } = this.props;
+    const { dispatch, assertions, score } = this.props;
+    const THREE = 3;
+
     return (
       <>
         <Header />
@@ -38,6 +39,7 @@ class Feedback extends Component {
           <button
             type="button"
             data-testid="btn-play-again"
+            onClick={ () => dispatch(clearPlayerInfos()) }
           >
             Play Again
           </button>
@@ -48,6 +50,7 @@ class Feedback extends Component {
 }
 
 Feedback.propTypes = {
+  dispatch: P.func.isRequired,
   assertions: P.number.isRequired,
   score: P.number.isRequired,
 };

@@ -1,4 +1,5 @@
-import { ADD_ASSETTIONS, GRAVATAREMAIL, NAME, SUM_SCORE } from '../action';
+import { CLEAR_PLAYER_INFOS, ADD_ASSETTIONS, GRAVATAREMAIL,
+  NAME, SUM_SCORE } from '../action';
 
 const INITIAL_STATE = {
   player: {
@@ -30,6 +31,15 @@ const reduce = (state = INITIAL_STATE, action) => {
       ...state,
       player: {
         ...state.player, score: state.player.score + action.payload,
+      },
+    };
+  case CLEAR_PLAYER_INFOS:
+    return {
+      ...state,
+      player: {
+        name: '',
+        score: 0,
+        gravatarEmail: '',
       },
     };
   case ADD_ASSETTIONS:
