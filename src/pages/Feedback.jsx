@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
+import { clearPlayerInfos } from '../redux/action';
 
-export default class Feedback extends Component {
+class Feedback extends Component {
   render() {
+    const { dispatch } = this.props;
     return (
       <>
         <Header />
@@ -20,6 +24,7 @@ export default class Feedback extends Component {
           <button
             type="button"
             data-testid="btn-play-again"
+            onClick={ () => dispatch(clearPlayerInfos()) }
           >
             Play Again
           </button>
@@ -28,3 +33,9 @@ export default class Feedback extends Component {
     );
   }
 }
+
+Feedback.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect()(Feedback);
