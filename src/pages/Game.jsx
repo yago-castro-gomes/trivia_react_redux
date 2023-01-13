@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import P from 'prop-types';
 import fetchAnswerTrivia from '../services/apiAnswer';
 import Header from '../components/Header';
-import { sumScore } from '../redux/action';
+import { addAssertions, sumScore } from '../redux/action';
 
 // const MINUS = -1;
 // let countIndex = MINUS;
@@ -87,11 +87,12 @@ class Game extends Component {
     this.setState({ isNextVisible: true, disableButton: true });
 
     if (resposta === correctAnswer) {
-      console.log('fui chamado');
+      // console.log('fui chamado');
       const TEN = 10;
       const key = answer[answerNumber].difficulty;
       const score = TEN + (time * difficulty[key]);
       dispatch(sumScore(score));
+      dispatch(addAssertions());
     }
   };
 
