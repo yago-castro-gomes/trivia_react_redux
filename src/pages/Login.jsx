@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { fetchTokenTrivia } from '../services/apiTrivia';
 import { getGravatarEmail, getName } from '../redux/action';
+import '../syles/Login.css';
+import Logo from '../imgs/trivia-logo.png';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Form } from 'react-bootstrap';
+import { Button } from 'bootstrap';
 
 class Login extends Component {
   state = {
@@ -38,51 +42,68 @@ class Login extends Component {
     history.push('/game');
   };
 
+  onclickSetting = () => {
+    const { history } = this.props;
+    history.push('/settings');
+  };
+
   render() {
     const { name, email, isDisable } = this.state;
     return (
-      <form onSubmit={ this.handleSubmit }>
-        <label htmlFor="name">
-          Nome
-          <input
-            type="text"
-            name="name"
-            id="name"
-            data-testid="input-player-name"
-            value={ name }
-            onChange={ this.handleChange }
-            required
-          />
-        </label>
-        <label htmlFor="email">
-          E-mail
-          <input
-            type="text"
-            name="email"
-            id="email"
-            data-testid="input-gravatar-email"
-            value={ email }
-            onChange={ this.handleChange }
-            required
-          />
-        </label>
-        <button
-          type="submit"
-          data-testid="btn-play"
-          disabled={ isDisable }
-        >
-          Play
+      <>
+        <img src={ Logo } alt="" />
 
-        </button>
-        <Link to="/settings">
-          <button
-            type="button"
-            data-testid="btn-settings"
-          >
-            Settings
-          </button>
-        </Link>
-      </form>
+        <div className="formContent">
+          <Form onSubmit={ this.handleSubmit }>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label htmlFor="name">
+                <Form.Control
+                  placeholder="Nome"
+                  type="text"
+                  name="name"
+                  id="name"
+                  data-testid="input-player-name"
+                  value={ name }
+                  onChange={ this.handleChange }
+                  required
+                  className="mb-3"
+                  controlId="formBasicEmail"
+                />
+              </Form.Label>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label htmlFor="email">
+
+                <Form.Control
+                  placeholder="E-mail"
+                  type="text"
+                  name="email"
+                  id="email"
+                  data-testid="input-gravatar-email"
+                  value={ email }
+                  onChange={ this.handleChange }
+                  required
+                />
+              </Form.Label>
+            </Form.Group>
+            <button
+              type="submit"
+              data-testid="btn-play"
+              disabled={ isDisable }
+            >
+              Play
+
+            </button>
+            <button
+              type="button"
+              data-testid="btn-settings"
+              onClick={ this.onclickSetting }
+            >
+              Settings
+            </button>
+          </Form>
+        </div>
+      </>
     );
   }
 }

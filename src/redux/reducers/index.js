@@ -40,6 +40,7 @@ const reduce = (state = INITIAL_STATE, action) => {
         name: '',
         score: 0,
         gravatarEmail: '',
+        assertions: 0,
       },
     };
   case ADD_ASSETTIONS:
